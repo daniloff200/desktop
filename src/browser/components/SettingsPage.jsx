@@ -418,6 +418,13 @@ export default class SettingsPage extends React.Component {
     });
   }
 
+  handleChangeDownloadLocation = (e) => {
+    setImmediate(this.saveSetting, CONFIG_TYPE_APP_OPTIONS, {key: 'inputDownloadLocation', data: e.target.value});
+    this.setState({
+      downloadLocation: e.target.value,
+    });
+  }
+
   updateTeam = (index, newData) => {
     const teams = this.state.localTeams;
     teams[index] = newData;
@@ -501,7 +508,7 @@ export default class SettingsPage extends React.Component {
         showAddServerButton={false}
       />
     );
-
+    console.log(config);
     let topBarClassName = 'topBar';
     if (process.platform === 'darwin') {
       topBarClassName += ' macOS';
@@ -877,6 +884,30 @@ export default class SettingsPage extends React.Component {
           {' Setting takes effect after restarting the app.'}
         </HelpBlock>
       </Checkbox>
+    );
+
+    options.push(
+      <div>
+        <HelpBlock>{'Download Location'} </HelpBlock>
+        <input
+          key='inputDownloadLocation'
+          id='inputDownloadLocation'
+          ref='downloadLocation'
+          onChange={this.handleChangeDownloadLocation}
+          value={this.state.downloadLocation}
+        />
+        <HelpBlock>
+          {'Specify the folder where files will download'}
+        </HelpBlock>
+        <Button
+          id='btnChange'
+          className='ChangeButton'
+          style={settingsPage.close}
+          onClick={this.handleCancel}
+        >
+          <span>{'×'}</span>
+        </Button>
+      </div>
     );
 
     const optionsRow = (options.length > 0) ? (
